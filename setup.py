@@ -3,10 +3,10 @@ import setuptools
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
     
-exec(open('scdrs/version.py').read())
+exec(open('scdrs_rat/version.py').read())
 
 setuptools.setup(
-    name="scdrs",
+    name="scdrs_rat",
     version=__version__,
     author="Martin Jinye Zhang, Kangcheng Hou",
     author_email="martinjzhang@gmail.com, kangchenghou@gmail.com",
@@ -20,7 +20,7 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    packages=["scdrs"],
+    packages=["scdrs_rat"],
     python_requires=">=3.5",
     install_requires=[
         "numpy>=1.19.0",
@@ -35,7 +35,7 @@ setuptools.setup(
         "pytest>=6.2.0",
     ],
     scripts=[
-        "bin/scdrs",
+        "bin/scdrs_rat",
     ],
-    package_data={'scdrs': ['data/*']},
+    package_data={'scdrs_rat': ['data/*']},
 )
