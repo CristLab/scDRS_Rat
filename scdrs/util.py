@@ -16,8 +16,8 @@ import matplotlib.patches as patches
 
 
 def convert_species_name(species):
-    if species in ["Mouse", "mouse", "Mus_musculus", "mus_musculus", "mmusculus"]:
-        return "mmusculus"
+    if species in ["Rat", "rat", "Rattus_norvegicus", "rattus_norvegicus", "rnorvegicus"]:
+        return "rnorvegicus"
     if species in ["Human", "human", "Homo_sapiens", "homo_sapiens", "hsapiens"]:
         return "hsapiens"
     raise ValueError("species name '%s' is not supported" % species)
@@ -150,14 +150,14 @@ def load_scdrs_score(
 
 
 def load_homolog_mapping(src_species: str, dst_species: str) -> dict:
-    """Load gene homologs between mouse and human.
+    """Load gene homologs between rat and human.
 
     Parameters
     ----------
     src_species : str
-        Source species. One of 'mmusculus', 'mouse', 'hsapiens', or 'human'.
+        Source species. One of 'rnorvegicus', 'rat', 'hsapiens', or 'human'.rnorvegicus
     dst_species : str
-        Destination species. One of 'mmusculus', 'mouse', 'hsapiens', or 'human'.
+        Destination species. One of 'rnorvegicus', 'rat', 'hsapiens', or 'human'.
         Cannot be the same as `src_species`.
 
     Returns
@@ -172,16 +172,16 @@ def load_homolog_mapping(src_species: str, dst_species: str) -> dict:
     assert src_species != dst_species, "src and dst cannot be the same"
 
     df_hom = pd.read_csv(
-        os.path.join(os.path.dirname(__file__), "data/mouse_human_homologs.txt"),
+        os.path.join(os.path.dirname(__file__), "data/rat_human_homologs.txt"),
         sep="\t",
     )
-    if (src_species == "hsapiens") & (dst_species == "mmusculus"):
+    if (src_species == "hsapiens") & (dst_species == "rnorvegicus"):
         dic_map = {
-            x: y for x, y in zip(df_hom["HUMAN_GENE_SYM"], df_hom["MOUSE_GENE_SYM"])
+            x: y for x, y in zip(df_hom["HUMAN_GENE_SYM"], df_hom["RAT_GENE_SYM"])
         }
-    elif (src_species == "mmusculus") & (dst_species == "hsapiens"):
+    elif (src_species == "rnorvegicus") & (dst_species == "hsapiens"):
         dic_map = {
-            x: y for x, y in zip(df_hom["MOUSE_GENE_SYM"], df_hom["HUMAN_GENE_SYM"])
+            x: y for x, y in zip(df_hom["RAT_GENE_SYM"], df_hom["HUMAN_GENE_SYM"])
         }
     else:
         raise NotImplementedError(
@@ -209,9 +209,9 @@ def load_gs(
         "<gene1>,<gene2>,<gene3>". For weighted gene set, the 'GENESET' column contains
         gene names and weights, e.g., "<gene1>:<weight1>,<gene2>:<weight2>,<gene3>:<weight3>".
     src_species : str, default=None
-        Source species, must be either 'mmusculus' or 'hsapiens' if not None
+        Source species, must be either 'rnorvegicus' or 'hsapiens' if not None
     dst_species : str, default=None
-        Destination species, must be either 'mmusculus' or 'hsapiens' if not None
+        Destination species, must be either 'rnorvegicus' or 'hsapiens' if not None
     to_intersect : List[str], default=None.
         Gene list to intersect with the input .gs file.
 
