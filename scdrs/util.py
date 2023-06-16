@@ -80,7 +80,7 @@ def load_h5ad(
             "h5ad expression matrix should not contain negative values. "
             "This is because in the preprocessing step, "
             "scDRS models the gene-level log mean-variance relationship. "
-            "See scdrs.pp.compute_stats for details."
+            "See scdrs_rat.pp.compute_stats for details."
         )
 
     if flag_filter_data:
