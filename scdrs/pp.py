@@ -52,7 +52,7 @@ def category2dummy(
 
     if (len(cols_to_add) > 0) and verbose:
         print(
-            "scdrs.pp.category2dummy: "
+            "scdrs_rat.pp.category2dummy: "
             f"Detected categorical columns: {','.join(cols)}. "
             f"Added dummy columns: {','.join(cols_to_add)}. "
             f"Dropped columns: {','.join(cols_to_drop)}."
@@ -332,7 +332,7 @@ def compute_stats(
     if implicit_cov_corr:
         assert (
             "SCDRS_PARAM" in adata.uns
-        ), "adata.uns['SCDRS_PARAM'] is not found, run `scdrs.pp.preprocess` before calling this function"
+        ), "adata.uns['SCDRS_PARAM'] is not found, run `scdrs_rat.pp.preprocess` before calling this function"
 
     df_gene = pd.DataFrame(
         index=adata.var_names,
