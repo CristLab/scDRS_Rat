@@ -33,8 +33,8 @@ VERSION = "beta"
 
 
 def convert_species_name(species):
-    if species in ["Mouse", "mouse", "Mus_musculus", "mus_musculus", "mmusculus"]:
-        return "mmusculus"
+    if species in ["Rat", "rat", "Rattus_norvegicus", "rattus_norvegicus", "rnorvegicus"]:
+        return "rnorvegicus"
     if species in ["Human", "human", "Homo_sapiens", "homo_sapiens", "hsapiens"]:
         return "hsapiens"
     raise ValueError("# compute_score: species name %s not supported" % species)
@@ -92,14 +92,14 @@ def main(args):
 
     # Check options
     if H5AD_SPECIES != GS_SPECIES:
-        if H5AD_SPECIES not in ["mmusculus", "hsapiens"]:
+        if H5AD_SPECIES not in ["rnorvegicus", "hsapiens"]:
             raise ValueError(
-                "--h5ad_species needs to be one of [mmusculus, hsapiens] "
+                "--h5ad_species needs to be one of [rnorvegicus, hsapiens] "
                 "unless --h5ad_species==--gs_species"
             )
-        if GS_SPECIES not in ["mmusculus", "hsapiens"]:
+        if GS_SPECIES not in ["rnorvegicus", "hsapiens"]:
             raise ValueError(
-                "--gs_species needs to be one of [mmusculus, hsapiens] "
+                "--gs_species needs to be one of [rnorvegicus, hsapiens] "
                 "unless --h5ad_species==--gs_species"
             )
     if CTRL_MATCH_OPT not in ["mean", "mean_var"]:
@@ -210,12 +210,12 @@ if __name__ == "__main__":
 
     parser.add_argument("--h5ad_file", type=str, required=True)
     parser.add_argument(
-        "--h5ad_species", type=str, required=True, help="one of [hsapiens, mmusculus]"
+        "--h5ad_species", type=str, required=True, help="one of [hsapiens, rnorvegicus]"
     )
     parser.add_argument("--cov_file", type=str, required=False, default=None)
     parser.add_argument("--gs_file", type=str, required=True)
     parser.add_argument(
-        "--gs_species", type=str, required=True, help="one of [hsapiens, mmusculus]"
+        "--gs_species", type=str, required=True, help="one of [hsapiens, rnorvegicus]"
     )
     parser.add_argument(
         "--ctrl_match_opt", type=str, required=False, default="mean_var"
