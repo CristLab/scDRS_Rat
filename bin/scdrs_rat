@@ -48,11 +48,11 @@ def compute_score(
     h5ad_file : str
         Single-cell .h5ad file.
     h5ad_species : str
-        Species of h5ad_file. One of "hsapiens", "human", "mmusculus", or "mouse".
+        Species of h5ad_file. One of "hsapiens", "human", "rnorvegicus", or "rat".
     gs_file : str
         scDRS gene set .gs file.
     gs_species : str
-        Species of the gs file. One of "hsapiens", "human", "mmusculus", or "mouse".
+        Species of the gs file. One of "hsapiens", "human", "rnorvegicus", or "rat".
     out_folder : str
         Output folder. Save scDRS score files as `<out_folder>/<trait>.score.gz` and
         scDRS full score files as `<out_folder>/<trait>.full_score.gz`, where trait 
@@ -149,14 +149,14 @@ def compute_score(
 
     # Check options
     if H5AD_SPECIES != GS_SPECIES:
-        if H5AD_SPECIES not in ["mmusculus", "hsapiens"]:
+        if H5AD_SPECIES not in ["rnorvegicus", "hsapiens"]:
             raise ValueError(
-                "--h5ad-species needs to be one of [mmusculus, hsapiens] "
+                "--h5ad-species needs to be one of [rnorvegicus, hsapiens] "
                 "unless --h5ad-species==--gs-species"
             )
-        if GS_SPECIES not in ["mmusculus", "hsapiens"]:
+        if GS_SPECIES not in ["rnorvegicus", "hsapiens"]:
             raise ValueError(
-                "--gs-species needs to be one of [mmusculus, hsapiens] "
+                "--gs-species needs to be one of [rnorvegicus, hsapiens] "
                 "unless --h5ad-species==--gs-species"
             )
     if CTRL_MATCH_OPT not in ["mean", "mean_var"]:
