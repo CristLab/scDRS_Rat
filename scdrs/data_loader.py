@@ -3,7 +3,7 @@ import numpy as np
 import time
 from anndata import read_h5ad
 from anndata import AnnData
-import scdrs.method as md
+import scdrs_rat.method as md
 
 def load_tms_processed(file_path, data_name='facs', tissue='all'):
     
@@ -178,7 +178,7 @@ def load_aizarani(file_path, opt='raw',
             sc.pp.log1p(adata)
         
     if opt=='processed':
-        DATA_PATH='/n/holystore01/LABS/price_lab/Users/mjzhang/scDRS_data/single_cell_data/liver_atlas'
+        DATA_PATH='/n/holystore01/LABS/price_lab/Users/mjzhang/_data/single_cell_data/liver_atlas'
         adata = read_h5ad(file_path+'/single_cell_data/liver_atlas/obj_processed.h5ad')
         
     return adata
@@ -209,7 +209,7 @@ def load_richter(file_path, opt='raw',
                  flag_log1p=True):
     
     if opt=='raw':
-        DATA_PATH='/n/holystore01/LABS/price_lab/Users/mjzhang/scDRS_data/single_cell_data/richter_biorxiv_2020'
+        DATA_PATH='/n/holystore01/LABS/price_lab/Users/mjzhang/_data/single_cell_data/richter_biorxiv_2020'
         adata = read_h5ad(file_path+'/single_cell_data/richter_biorxiv_2020/obj_raw.h5ad')
         
         if flag_size_factor == True:
@@ -248,7 +248,7 @@ def load_asp_st_raw_data(opt='raw',
                          flag_log1p=True):
     
     if opt=='raw':
-        DATA_PATH='/n/holystore01/LABS/price_lab/Users/mjzhang/scDRS_data/single_cell_data/heart_asp_cell_2019'
+        DATA_PATH='/n/holystore01/LABS/price_lab/Users/mjzhang/_data/single_cell_data/heart_asp_cell_2019'
         adata = read_h5ad(DATA_PATH+'/obj_raw_st.h5ad')
         
         if flag_size_factor == True:
@@ -257,7 +257,7 @@ def load_asp_st_raw_data(opt='raw',
             sc.pp.log1p(adata)
         
     if opt=='processed':
-        DATA_PATH='/n/holystore01/LABS/price_lab/Users/mjzhang/scDRS_data/single_cell_data/heart_asp_cell_2019'
+        DATA_PATH='/n/holystore01/LABS/price_lab/Users/mjzhang/_data/single_cell_data/heart_asp_cell_2019'
         adata = read_h5ad(DATA_PATH+'/obj_processed_st.h5ad')
         
     return adata
@@ -269,7 +269,7 @@ def load_asp_sc_raw_data(opt='raw',
                          flag_log1p=True):
     
     if opt=='raw':
-        DATA_PATH='/n/holystore01/LABS/price_lab/Users/mjzhang/scDRS_data/single_cell_data/heart_asp_cell_2019'
+        DATA_PATH='/n/holystore01/LABS/price_lab/Users/mjzhang/_data/single_cell_data/heart_asp_cell_2019'
         adata = read_h5ad(DATA_PATH+'/obj_raw_sc.h5ad')
         
         if flag_size_factor == True:
@@ -278,7 +278,7 @@ def load_asp_sc_raw_data(opt='raw',
             sc.pp.log1p(adata)
         
     if opt=='processed':
-        DATA_PATH='/n/holystore01/LABS/price_lab/Users/mjzhang/scDRS_data/single_cell_data/heart_asp_cell_2019'
+        DATA_PATH='/n/holystore01/LABS/price_lab/Users/mjzhang/_data/single_cell_data/heart_asp_cell_2019'
         adata = read_h5ad(DATA_PATH+'/obj_processed_sc.h5ad')
         
     return adata
@@ -290,7 +290,7 @@ def load_xin_raw_data(opt='raw',
                       flag_log1p=True):
     
     if opt=='raw':
-        DATA_PATH='/n/holystore01/LABS/price_lab/Users/mjzhang/scDRS_data/single_cell_data/xin_diabetes_2018'
+        DATA_PATH='/n/holystore01/LABS/price_lab/Users/mjzhang/_data/single_cell_data/xin_diabetes_2018'
         adata = read_h5ad(DATA_PATH+'/obj_raw.h5ad')
         
         if flag_size_factor == True:
