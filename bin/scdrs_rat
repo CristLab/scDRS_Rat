@@ -4,7 +4,7 @@ import fire
 import pandas as pd
 import numpy as np
 from statsmodels.stats.multitest import multipletests
-import scdrs
+import scdrs_rat
 from typing import Dict, List
 import scanpy as sc
 import os
@@ -14,7 +14,7 @@ import time
 def get_cli_head():
     MASTHEAD = "******************************************************************************\n"
     MASTHEAD += "* Single-cell disease relevance score (scDRS)\n"
-    MASTHEAD += "* Version %s\n" % scdrs.__version__
+    MASTHEAD += "* Version %s\n" % scdrs_rat.__version__
     MASTHEAD += "* Martin Jinye Zhang and Kangcheng Hou\n"
     MASTHEAD += "* HSPH / Broad Institute / UCLA\n"
     MASTHEAD += "* MIT License\n"
@@ -124,11 +124,11 @@ def compute_score(
     OUT_FOLDER = out_folder
 
     if H5AD_SPECIES != GS_SPECIES:
-        H5AD_SPECIES = scdrs.util.convert_species_name(H5AD_SPECIES)
-        GS_SPECIES = scdrs.util.convert_species_name(GS_SPECIES)
+        H5AD_SPECIES = scdrs_rat.util.convert_species_name(H5AD_SPECIES)
+        GS_SPECIES = scdrs_rat.util.convert_species_name(GS_SPECIES)
 
     header = get_cli_head()
-    header += "Call: scdrs compute-score \\\n"
+    header += "Call: scdrs_rat compute-score \\\n"
     header += "--h5ad-file %s \\\n" % H5AD_FILE
     header += "--h5ad-species %s \\\n" % H5AD_SPECIES
     header += "--cov-file %s \\\n" % COV_FILE
@@ -170,7 +170,7 @@ def compute_score(
     print("Loading data:")
 
     # Load .h5ad file
-    adata = scdrs.util.load_h5ad(
+    adata = scdrs_rat.util.load_h5ad(
         H5AD_FILE,
         flag_filter_data=FLAG_FILTER_DATA,
         flag_raw_count=FLAG_RAW_COUNT,
@@ -220,7 +220,7 @@ def compute_score(
         df_cov = None
 
     # Load .gs file
-    dict_gs = scdrs.util.load_gs(
+    dict_gs = scdrs_rat.util.load_gs(
         GS_FILE,
         src_species=GS_SPECIES,
         dst_species=H5AD_SPECIES,
@@ -245,7 +245,7 @@ def compute_score(
 
     # Preprocess
     print("Preprocessing:")
-    scdrs.preprocess(
+    scdrs_rat.preprocess(
         adata, cov=df_cov, adj_prop=ADJ_PROP, n_mean_bin=20, n_var_bin=20, copy=False
     )
     print("")
@@ -261,7 +261,7 @@ def compute_score(
             )
             continue
 
-        df_res = scdrs.score_cell(
+        df_res = scdrs_rat.score_cell(
             adata,
             gene_list,
             gene_weight=gene_weights,
@@ -379,7 +379,7 @@ def munge_gs(
     ######                                    Parse Options                              ######
     ###########################################################################################
     header = get_cli_head()
-    header += "Call: scdrs munge-gs \\\n"
+    header += "Call: scdrs_rat munge-gs \\\n"
 
     assert (
         sum([(pval_file is not None), (zscore_file is not None)]) == 1
@@ -500,7 +500,7 @@ def munge_gs(
 
         df_pval = df_zscore.copy()
         for col in df_pval:
-            df_pval[col] = scdrs.util.zsc2pval(df_zscore[col])
+            df_pval[col] = scdrs_rat.util.zsc2pval(df_zscore[col])
         print("")
 
     trait_list = sorted(df_pval.columns)
@@ -538,7 +538,7 @@ def munge_gs(
         gene_pvals = df_trait_pval[trait].values.clip(min=1e-100)
 
         if weight == "zscore":
-            gene_weights = scdrs.util.pval2zsc(gene_pvals).clip(max=10)
+            gene_weights = scdrs_rat.util.pval2zsc(gene_pvals).clip(max=10)
         if weight == "uniform":
             gene_weights = np.ones(len(gene_list))
 
@@ -643,7 +643,7 @@ def perform_downstream(
     ######                                    Parse Options                              ######
     ###########################################################################################
     header = get_cli_head()
-    header += "Call: scdrs perform-downstream \\\n"
+    header += "Call: scdrs_rat perform-downstream \\\n"
 
     assert h5ad_file is not None, "--h5ad-file is expected."
     header += "--h5ad-file %s \\\n" % h5ad_file
@@ -666,7 +666,7 @@ def perform_downstream(
     ), "Expect at least one of `--group_analysis`, `--corr_analysis`, `--gene_analyis`"
     if group_analysis is not None:
         # Determine if string or list_like using duck-typing
-        input_type = scdrs.util.str_or_list_like(group_analysis)
+        input_type = scdrs_rat.util.str_or_list_like(group_analysis)
         if input_type == "str":
             group_analysis = group_analysis.split(",")
         elif input_type == "list_like":
@@ -677,7 +677,7 @@ def perform_downstream(
         header += "--group-analysis %s\\\n" % ",".join(group_analysis)
     if corr_analysis is not None:
         # Determine if string or list_like using duck-typing
-        input_type = scdrs.util.str_or_list_like(corr_analysis)
+        input_type = scdrs_rat.util.str_or_list_like(corr_analysis)
         if input_type == "str":
             corr_analysis = corr_analysis.split(",")
         elif input_type == "list_like":
@@ -700,7 +700,7 @@ def perform_downstream(
     ###########################################################################################
     ######                                     Load data                                 ######
     ###########################################################################################
-    adata = scdrs.util.load_h5ad(
+    adata = scdrs_rat.util.load_h5ad(
         h5ad_file=h5ad_file,
         flag_filter_data=flag_filter_data,
         flag_raw_count=flag_raw_count,
@@ -714,7 +714,7 @@ def perform_downstream(
     print("First 3 cells: %s" % (str(list(adata.obs_names[:3]))))
     print("First 5 genes: %s" % (str(list(adata.var_names[:5]))))
 
-    dict_score = scdrs.util.load_scdrs_score(score_file)
+    dict_score = scdrs_rat.util.load_scdrs_score(score_file)
     print(
         "--score-file loaded: n_trait=%d (sys_time=%0.1fs)"
         % (len(dict_score), time.time() - sys_start_time)
@@ -759,7 +759,7 @@ def perform_downstream(
             )
         # scDRS group-level analysis
         for trait in dict_score:
-            dict_df_res = scdrs.method.downstream_group_analysis(
+            dict_df_res = scdrs_rat.method.downstream_group_analysis(
                 adata=adata,
                 df_full_score=dict_score[trait],
                 group_cols=group_analysis,
@@ -782,7 +782,7 @@ def perform_downstream(
     if corr_analysis is not None:
         print("Performing scDRS corr-analysis")
         for trait in dict_score:
-            df_res = scdrs.method.downstream_corr_analysis(
+            df_res = scdrs_rat.method.downstream_corr_analysis(
                 adata=adata, df_full_score=dict_score[trait], var_cols=corr_analysis
             )
             df_res.to_csv(
@@ -799,7 +799,7 @@ def perform_downstream(
     if gene_analysis is not None:
         print("Performing scDRS gene-analysis")
         for trait in dict_score:
-            df_res = scdrs.method.downstream_gene_analysis(
+            df_res = scdrs_rat.method.downstream_gene_analysis(
                 adata=adata, df_full_score=dict_score[trait]
             )
             # save results
