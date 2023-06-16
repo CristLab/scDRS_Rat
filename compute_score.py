@@ -7,7 +7,7 @@ import os
 import time
 import argparse
 from statsmodels.stats.multitest import multipletests
-import scdrs
+import scdrs_rat
 
 """
 # Fixit
@@ -134,7 +134,7 @@ def main(args):
         df_cov = None
 
     # Load .gs file, convert species if needed and merge with adata.var_names
-    dict_gs = scdrs.util.load_gs(
+    dict_gs = scdrs_rat.util.load_gs(
         GS_FILE,
         src_species=GS_SPECIES,
         dst_species=H5AD_SPECIES,
@@ -150,7 +150,7 @@ def main(args):
     ###########################################################################################
     
     # Preprocess 
-    scdrs.preprocess(adata, cov=df_cov, n_mean_bin=20, n_var_bin=20, copy=False)
+    scdrs_rat.preprocess(adata, cov=df_cov, n_mean_bin=20, n_var_bin=20, copy=False)
 
     # Compute score
     print("Compute score:")
@@ -163,7 +163,7 @@ def main(args):
             )
             continue
             
-        df_res = scdrs.score_cell(
+        df_res = scdrs_rat.score_cell(
             adata,
             gene_list,
             gene_weight=gene_weights,
