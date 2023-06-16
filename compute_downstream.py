@@ -10,9 +10,9 @@ import argparse
 from statsmodels.stats.multitest import multipletests
 
 # Inhouse tools
-import scdrs.util as util
-import scdrs.data_loader as dl
-import scdrs.method as md
+import scdrs_rat.util as util
+import scdrs_rat.data_loader as dl
+import scdrs_rat.method as md
 
 
 """
@@ -27,7 +27,7 @@ import scdrs.method as md
 - Add --n_ctrl (default value 500) 
 - Add --cov_file option to regress out covariates stored in COV_FILE before feeding into the score function 
 - Add --ctrl_match_opt='mean_var': use mean- and var- matched control genes 
-- Change name from scTRS to scdrs (072721)
+- Change name from scTRS to  (072721)
 - Fixed: Warning for compute_score: Trying to set attribute `.X` of view, copying. (did: v_norm_score = v_raw_score.copy())
 
 """
@@ -40,7 +40,7 @@ def main(args):
     sys_start_time = time.time()
 
     MASTHEAD = "******************************************************************************\n"
-    MASTHEAD += "* scDRS downsteam analyses \n"
+    MASTHEAD += "*  downsteam analyses \n"
     MASTHEAD += "* Version %s\n" % VERSION
     MASTHEAD += "* Martin Jinye Zhang and Kangcheng Hou\n"
     MASTHEAD += "* HSPH / Broad Institute / UCLA\n"
