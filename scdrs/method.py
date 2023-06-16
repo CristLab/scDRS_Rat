@@ -6,7 +6,7 @@ from tqdm import tqdm
 import anndata
 from typing import List, Dict, Tuple
 from statsmodels.stats.multitest import multipletests
-import scdrs
+import scdrs_rat
 
 
 def score_cell(
@@ -100,18 +100,18 @@ def score_cell(
     # Check preprocessing information
     assert (
         "SCDRS_PARAM" in adata.uns
-    ), "adata.uns['SCDRS_PARAM'] not found, run `scdrs.pp.preprocess` first"
+    ), "adata.uns['SCDRS_PARAM'] not found, run `scdrs_rat.pp.preprocess` first"
 
     # Check GENE_STATS from adata.uns["SCDRS_PARAM"]
     assert (
         "GENE_STATS" in adata.uns["SCDRS_PARAM"]
-    ), "adata.uns['SCDRS_PARAM']['GENE_STATS'] not found, run `scdrs.pp.preprocess` first"
+    ), "adata.uns['SCDRS_PARAM']['GENE_STATS'] not found, run `scdrs_rat.pp.preprocess` first"
 
     gene_stats_set_expect = {"mean", "var", "var_tech"}
     gene_stats_set = set(adata.uns["SCDRS_PARAM"]["GENE_STATS"])
     assert (
         len(gene_stats_set_expect - gene_stats_set) == 0
-    ), "One of 'mean', 'var', 'var_tech' not found in adata.uns['SCDRS_PARAM']['GENE_STATS'], run `scdrs.pp.preprocess` first"
+    ), "One of 'mean', 'var', 'var_tech' not found in adata.uns['SCDRS_PARAM']['GENE_STATS'], run `scdrs_rat.pp.preprocess` first"
 
     # Check if ctrl_match_key is in GENE_STATS
     assert ctrl_match_key in adata.uns["SCDRS_PARAM"]["GENE_STATS"], (
@@ -125,7 +125,7 @@ def score_cell(
     )
 
     if verbose:
-        msg = "# scdrs.method.score_cell summary:"
+        msg = "# scdrs_rat.method.score_cell summary:"
         msg += "\n    n_cell=%d, n_gene=%d," % (n_cell, n_gene)
         msg += "\n    n_disease_gene=%d," % len(gene_list)
         msg += "\n    n_ctrl=%d, n_genebin=%d," % (n_ctrl, n_genebin)
@@ -158,7 +158,7 @@ def score_cell(
 
     if verbose:
         print(
-            "# scdrs.method.score_cell: use %d overlapping genes for scoring"
+            "# scdrs_rat.method.score_cell: use %d overlapping genes for scoring"
             % len(gene_list)
         )
 
@@ -235,7 +235,7 @@ def _select_ctrl_geneset(
     random_seed,
 ):
 
-    """Subroutine for `scdrs.method.score_cell`. Select control gene sets that match
+    """Subroutine for `scdrs_rat.method.score_cell`. Select control gene sets that match
     the disease gene set by `ctrl_match_key`.
 
     It recognizes `ctrl_match_key` as categorical if the number of unique values is
@@ -356,7 +356,7 @@ def _compute_raw_score(adata, gene_list, gene_weight, weight_opt):
     # Compute other weighted average scores
     assert (
         "SCDRS_PARAM" in adata.uns
-    ), "adata.uns['SCDRS_PARAM'] not found, run `scdrs.pp.preprocess` first"
+    ), "adata.uns['SCDRS_PARAM'] not found, run `scdrs_rat.pp.preprocess` first"
 
     df_gene = adata.uns["SCDRS_PARAM"]["GENE_STATS"]
     flag_sparse = adata.uns["SCDRS_PARAM"]["FLAG_SPARSE"]
@@ -429,7 +429,7 @@ def _compute_overdispersion_score(adata, gene_list, gene_weight):
 
     assert (
         "SCDRS_PARAM" in adata.uns
-    ), "adata.uns['SCDRS_PARAM'] not found, run `scdrs.pp.preprocess` first"
+    ), "adata.uns['SCDRS_PARAM'] not found, run `scdrs_rat.pp.preprocess` first"
 
     # Mode check
     flag_sparse = adata.uns["SCDRS_PARAM"]["FLAG_SPARSE"]
@@ -648,7 +648,7 @@ def score_cell_vision(adata, gene_list):
     """
 
     gene_list = sorted(set(gene_list) & set(adata.var_names))
-    v_mean, v_var = scdrs.pp._get_mean_var(adata.X, axis=1)
+    v_mean, v_var = scdrs_rat.pp._get_mean_var(adata.X, axis=1)
 
     v_score = adata[:, gene_list].X.mean(axis=1)
     v_score = np.array(v_score).reshape([-1])
@@ -1143,9 +1143,9 @@ def _pearson_corr_sparse(mat_X, mat_Y):
         mat_Y = sp.sparse.csr_matrix(mat_Y)
 
     # Compute v_mean,v_var
-    v_X_mean, v_X_var = scdrs.pp._get_mean_var(mat_X, axis=0)
+    v_X_mean, v_X_var = scdrs_rat.pp._get_mean_var(mat_X, axis=0)
     v_X_sd = np.sqrt(v_X_var).clip(min=1e-8)
-    v_Y_mean, v_Y_var = scdrs.pp._get_mean_var(mat_Y, axis=0)
+    v_Y_mean, v_Y_var = scdrs_rat.pp._get_mean_var(mat_Y, axis=0)
     v_Y_sd = np.sqrt(v_Y_var).clip(min=1e-8)
 
     mat_corr = mat_X.T.dot(mat_Y) / mat_X.shape[0]
@@ -1221,8 +1221,8 @@ def correlate_gene(
     if cov_list is not None:
         mat_cov = adata.obs[cov_list].values.copy()
         mat_cov = mat_cov - mat_cov.mean(axis=0)
-        v_trs = scdrs.pp.reg_out(v_trs, mat_cov)
-        mat_X = scdrs.pp.reg_out(mat_X, mat_cov)
+        v_trs = scdrs_rat.pp.reg_out(v_trs, mat_cov)
+        mat_X = scdrs_rat.pp.reg_out(mat_X, mat_cov)
 
     # Compute correlation
     if corr_opt == "pearson":
