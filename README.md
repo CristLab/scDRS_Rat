@@ -1,6 +1,6 @@
 <!--# scDRS <!-- omit in toc -->
 
-This variant of the scDRS package is altered to work with rat data instead of mouse. The scripts have been edited to reflect the change in species and to change the package name and any internal references to the package to "scdrs_rat" to prevent any issues with simultaneous installation alongside the original package. The homologs file has also be updated to swap mouse gene symbols for rat gene symbols and remove entries where no obvious rat homolog exists for the human gene. The rat gene list used here was obtained from the Rat Genome Database (https://rgd.mcw.edu/) on June 21, 2023. 
+This variant of the scDRS package is altered to work with rat data instead of mouse. The scripts have been edited to reflect the change in species and to change the package name and any internal references to the package to "scdrs_rat" to prevent any issues with simultaneous installation alongside the original version. The homologs file has also be updated to swap mouse gene symbols for rat gene symbols and remove entries where no obvious rat homolog exists for the human gene. The rat gene list used here was obtained from the Rat Genome Database (https://rgd.mcw.edu/) on June 21, 2023. 
 
 ### Installation
 
